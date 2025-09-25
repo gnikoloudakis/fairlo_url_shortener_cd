@@ -24,7 +24,7 @@ __pycache__
 
 # Installer logs
 pip-log.txt
-
+.terraform
 # Unit test / coverage reports
 .coverage
 .nox
