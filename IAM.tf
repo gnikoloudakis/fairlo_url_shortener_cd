@@ -43,30 +43,30 @@ resource "aws_iam_role" "service_task_def_task_role" {
     Name = "IAM/TaskDef/TaskRole"
   }
 }
+ # This role is for retrieving ECR images etc.
+resource "aws_iam_role_policy" "service_task_role_policy" {
+  name = "service-task-role-policy"
+  role = aws_iam_role.service_task_def_task_role.id
 
-# resource "aws_iam_role_policy" "service_task_role_policy" {
-#   name = "service-task-role-policy"
-#   role = aws_iam_role.service_task_def_task_role.id
-#
-#   policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Action = [
-#           "elasticache:DescribeCacheClusters",
-#           "elasticache:DescribeReplicationGroups"
-#         ]
-#         Effect   = "Allow"
-#         Resource = aws_elasticache_replication_group.redis.arn
-#       }
-#     ]
-#   })
-# }
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "elasticache:DescribeCacheClusters",
+          "elasticache:DescribeReplicationGroups"
+        ]
+        Effect   = "Allow"
+        Resource = aws_elasticache_replication_group.redis.arn
+      }
+    ]
+  })
+}
 
-# resource "aws_iam_role_policy_attachment" "task_execution_role_policy" {
-#   role       = aws_iam_role.task_def_execution_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-# }
+resource "aws_iam_role_policy_attachment" "task_execution_role_policy" {
+  role       = aws_iam_role.task_def_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
 
 # IAM Policy for ECS Task Execution Role
 resource "aws_iam_role_policy" "service_task_def_execution_role_policy" {
